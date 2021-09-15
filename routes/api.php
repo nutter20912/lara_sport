@@ -1,7 +1,12 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Sport\{
+    SportCategoryController,
+    SportController,
+    SportPlayController,
+    SportTypeController,
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +19,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('sport')->group(function () {
+    /** 體育 */
+    Route::post('/', [SportController::class, 'post']);
+    Route::get('/{id}', [SportController::class, 'get'])->whereNumber('id');
+
+    /** 類別 */
+    Route::post('/category', [SportCategoryController::class, 'post']);
+    Route::get('/category/{id}', [SportCategoryController::class, 'get'])->whereNumber('id');
+
+    /** 場別 */
+    Route::post('/type', [SportTypeController::class, 'post']);
+    Route::get('/type/{id}', [SportTypeController::class, 'get'])->whereNumber('id');
+
+    /** 玩法 */
+    Route::post('/play', [SportPlayController::class, 'post']);
+    Route::get('/play/{id}', [SportPlayController::class, 'get'])->whereNumber('id');
 });
