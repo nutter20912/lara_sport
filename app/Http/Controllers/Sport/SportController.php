@@ -34,38 +34,29 @@ class SportController extends Controller
         $sportTypeId = $request->input('sport_type_id');
         $sportPlayId = $request->input('sport_play_id');
 
-        $sportCategory = SportCategory::find($sportCategoryId);
-
-        if (!$sportCategory) {
+        if (!SportCategory::find($sportCategoryId)) {
             return ['msg' => 'not found SportCategory.'];
         }
 
-        $sportType = SportType::find($sportTypeId);
-
-        if (!$sportType) {
+        if (!SportType::find($sportTypeId)) {
             return ['msg' => 'not found SportType.'];
         }
 
-        $sportPlay = SportPlay::find($sportPlayId);
-
-        if (!$sportPlay) {
+        if (!SportPlay::find($sportPlayId)) {
             return ['msg' => 'not found SportPlay.'];
         }
 
-        $sport = Sport::where([
+        $params = [
             'sport_category_id' => $sportCategoryId,
             'sport_type_id' => $sportTypeId,
             'sport_play_id' => $sportPlayId,
-        ])->first();
+        ];
 
-        if ($sport) {
+        if (Sport::where($params)->first()) {
             return ['msg' => 'Duplicate sport.'];
         }
 
-        $sport = new Sport();
-        $sport->sportCategory()->associate($sportCategory);
-        $sport->sportType()->associate($sportType);
-        $sport->sportPlay()->associate($sportPlay);
+        $sport = Sport::create($params);
         $sport->save();
 
         return $sport;

@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Sport;
 
+/**
+ * 體育場別
+ */
 class SportType extends Model
 {
     use HasFactory;

@@ -23,6 +23,16 @@ class Sport extends Model
     protected $table = 'sport';
 
     /**
+     * @var array
+     */
+    protected $fillable = [
+        'sport_category_id',
+        'sport_type_id',
+        'sport_play_id',
+        'enable',
+    ];
+
+    /**
      * 體育類別
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -4,32 +4,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Sport;
 
 /**
- * 體育類別
+ * 體育聯盟
  */
-class SportCategory extends Model
+class SportLeague extends Model
 {
     use HasFactory;
 
     /**
      * @var string
      */
-    protected $table = 'sport_category';
+    protected $table = 'sport_league';
 
     /**
      * @var array
      */
     protected $fillable = [
+        'sport_category_id',
         'name',
     ];
 
     /**
-     * 體育
+     * 體育類別
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function sports()
+    public function sportCategory()
     {
-        return $this->hasMany(Sport::class);
+        return $this->belongsTo(SportCategory::class);
     }
 }
