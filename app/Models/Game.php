@@ -2,30 +2,20 @@
 
 namespace App\Models;
 
-use App\Models\{
-    SportCategory,
-    SportType,
-    SportPlay
-};
-
-/**
- * 體育
- */
-class Sport extends Model
+class Game extends Model
 {
     /**
      * @var string
      */
-    protected $table = 'sport';
+    protected $table = 'game';
 
     /**
      * @var array
      */
     protected $fillable = [
         'sport_category_id',
-        'sport_type_id',
-        'sport_play_id',
-        'enable',
+        'main_team_id',
+        'visit_team_id',
     ];
 
     /**
@@ -38,23 +28,24 @@ class Sport extends Model
         return $this->belongsTo(SportCategory::class);
     }
 
+
     /**
-     * 體育場別
+     * 主隊
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function sportType()
+    public function mainTeam()
     {
-        return $this->belongsTo(SportType::class);
+        return $this->belongsTo(SportTeam::class);
     }
 
     /**
-     * 體育玩法
+     * 客隊
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function sportPlay()
+    public function visitTeam()
     {
-        return $this->belongsTo(SportPlay::class);
+        return $this->belongsTo(SportTeam::class);
     }
 }

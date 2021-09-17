@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Game\{
+    GameController
+};
 use App\Http\Controllers\Sport\{
     SportCategoryController,
     SportController,
@@ -46,5 +49,13 @@ Route::prefix('sport')->group(function () {
     Route::post('/team', [SportTeamController::class, 'post']);
     Route::get('/team', [SportTeamController::class, 'getList']);
     Route::get('/team/{id}', [SportTeamController::class, 'get'])
+        ->whereNumber('id');
+});
+
+
+
+Route::prefix('game')->group(function () {
+    Route::post('/', [GameController::class, 'post']);
+    Route::get('/{id}', [GameController::class, 'get'])
         ->whereNumber('id');
 });

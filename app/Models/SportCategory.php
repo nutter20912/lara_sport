@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Sport;
 
 /**
@@ -11,8 +9,6 @@ use App\Models\Sport;
  */
 class SportCategory extends Model
 {
-    use HasFactory;
-
     /**
      * @var string
      */

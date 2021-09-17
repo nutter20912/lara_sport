@@ -2,16 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * 體育隊伍
  */
 class SportTeam extends Model
 {
-    use HasFactory;
-
     /**
      * @var string
      */
