@@ -42,10 +42,10 @@ class SportTeamController extends Controller
     /**
      * 取得隊伍
      *
-     * @param  Illuminate\Http\Request $request
+     * @param int $id
      * @return mixed
      */
-    public function get(Request $request, $id)
+    public function get($id)
     {
         return SportTeam::find($id) ?? ['msg' => 'not found'];
     }

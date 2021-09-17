@@ -16,7 +16,7 @@ class GameController extends Controller
      * @param  Illuminate\Http\Request $request
      * @return mixed
      */
-    protected function get(Request $request, $id)
+    protected function get($id)
     {
         return Game::find($id) ?? ['msg' => 'not found'];
     }

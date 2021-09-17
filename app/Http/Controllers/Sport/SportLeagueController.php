@@ -42,10 +42,10 @@ class SportLeagueController extends Controller
     /**
      * 取得聯盟
      *
-     * @param  Illuminate\Http\Request $request
+     * @param int $id
      * @return mixed
      */
-    public function get(Request $request, $id)
+    public function get($id)
     {
         return SportLeague::find($id) ?? ['msg' => 'not found'];
     }

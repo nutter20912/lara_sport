@@ -32,10 +32,10 @@ class SportCategoryController extends Controller
     /**
      * 查詢體育類別
      *
-     * @param  Illuminate\Http\Request $request
+     * @param int $id
      * @return mixed
      */
-    public function get(Request $request, $id)
+    public function get($id)
     {
         return SportCategory::find($id) ?? ['msg' => 'not found'];
     }

@@ -32,10 +32,10 @@ class SportPlayController extends Controller
     /**
      * 查詢體育玩法
      *
-     * @param  Illuminate\Http\Request $request
+     * @param int $id
      * @return mixed
      */
-    public function get(Request $request, $id)
+    public function get($id)
     {
         return SportPlay::find($id) ?? ['msg' => 'not found'];
     }

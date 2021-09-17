@@ -14,10 +14,10 @@ class SportController extends Controller
     /**
      * 取得體育項目
      *
-     * @param  Illuminate\Http\Request $request
+     * @param int $id
      * @return mixed
      */
-    protected function get(Request $request, $id)
+    protected function get($id)
     {
         return Sport::find($id) ?? ['msg' => 'not found'];
     }
