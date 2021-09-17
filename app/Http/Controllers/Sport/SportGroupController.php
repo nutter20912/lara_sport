@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class SportGroupController extends Controller
 {
     /**
-     * 取得體育項目
+     * 取得體育群組
      *
      * @param int $id
      * @return mixed
@@ -23,7 +23,7 @@ class SportGroupController extends Controller
     }
 
     /**
-     * 新增體育項目
+     * 新增體育群組
      *
      * @param  Illuminate\Http\Request $request
      * @return mixed

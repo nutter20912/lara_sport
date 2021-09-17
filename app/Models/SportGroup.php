@@ -2,12 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\{
-    SportCategory,
-    SportType,
-    SportPlay
-};
-
 /**
  * 體育群組
  */

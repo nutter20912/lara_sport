@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Sport;
-
 /**
  * 體育場別
  */
@@ -22,10 +20,10 @@ class SportType extends Model
     ];
 
     /**
-     * 體育
+     * 體育群組
      */
-    public function sports()
+    public function sportGroups()
     {
-        return $this->hasMany(Sport::class);
+        return $this->hasMany(SportGroup::class);
     }
 }
