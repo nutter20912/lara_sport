@@ -9,14 +9,14 @@ use App\Models\{
 };
 
 /**
- * 體育
+ * 體育群組
  */
-class Sport extends Model
+class SportGroup extends Model
 {
     /**
      * @var string
      */
-    protected $table = 'sport';
+    protected $table = 'sport_group';
 
     /**
      * @var array

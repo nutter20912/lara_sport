@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Sport;
 
 use App\Http\Controllers\Controller;
-use App\Models\Sport;
+use App\Models\SportGroup;
 use App\Models\SportCategory;
 use App\Models\SportPlay;
 use App\Models\SportType;
 use Illuminate\Http\Request;
 
-class SportController extends Controller
+class SportGroupController extends Controller
 {
     /**
      * 取得體育項目
@@ -19,7 +19,7 @@ class SportController extends Controller
      */
     protected function get($id)
     {
-        return Sport::find($id) ?? ['msg' => 'not found'];
+        return SportGroup::find($id) ?? ['msg' => 'not found'];
     }
 
     /**
@@ -52,11 +52,11 @@ class SportController extends Controller
             'sport_play_id' => $sportPlayId,
         ];
 
-        if (Sport::where($params)->first()) {
-            return ['msg' => 'Duplicate sport.'];
+        if (SportGroup::where($params)->first()) {
+            return ['msg' => 'Duplicate sport group.'];
         }
 
-        $sport = Sport::create($params);
+        $sport = SportGroup::create($params);
         $sport->save();
 
         return $sport;

@@ -6,7 +6,7 @@ use App\Http\Controllers\Game\{
 };
 use App\Http\Controllers\Sport\{
     SportCategoryController,
-    SportController,
+    SportGroupController,
     SportPlayController,
     SportTypeController,
     SportLeagueController,
@@ -25,8 +25,8 @@ use App\Http\Controllers\Sport\{
 */
 
 Route::prefix('sport')->group(function () {
-    Route::post('/', [SportController::class, 'post']);
-    Route::get('/{id}', [SportController::class, 'get'])
+    Route::post('group/', [SportGroupController::class, 'post']);
+    Route::get('group/{id}', [SportGroupController::class, 'get'])
         ->whereNumber('id');
 
     Route::post('/category', [SportCategoryController::class, 'post']);
