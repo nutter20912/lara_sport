@@ -179,6 +179,7 @@ return [
          * custom providers
          */
         App\Providers\ResponseMacroServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
     ],
 
     /*

@@ -8,9 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\SportCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-/**
- *@OA\Tag(name="sport category", description="體育類別")
- */
+
 class SportCategoryController extends Controller
 {
     /**
@@ -19,7 +17,7 @@ class SportCategoryController extends Controller
      * @OA\Post(
      *      path="/api/sport/category",
      *      operationId="postSportCategory",
-     *      tags={"sport category"},
+     *      tags={"sport"},
      *      summary="建立體育類別",
      *      description="建立體育類別",
      *      @OA\RequestBody(
@@ -64,7 +62,7 @@ class SportCategoryController extends Controller
      * @OA\Get(
      *      path="/api/sport/category/{id}",
      *      operationId="getSportCategory",
-     *      tags={"sport category"},
+     *      tags={"sport"},
      *      summary="回傳體育類別",
      *      description="回傳體育類別",
      *      @OA\Parameter(
