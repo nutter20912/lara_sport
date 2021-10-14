@@ -20,4 +20,14 @@ class BadRequestException extends Exception
             'message' => $this->getMessage(),
         ], 400);
     }
+
+    /**
+     * Report the exception.
+     *
+     * @return bool|null
+     */
+    public function report()
+    {
+        return null;
+    }
 }

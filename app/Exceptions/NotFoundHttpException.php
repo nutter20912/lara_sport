@@ -20,4 +20,14 @@ class NotFoundHttpException extends Exception
             'message' => $this->getMessage(),
         ], 404);
     }
+
+    /**
+     * Report the exception.
+     *
+     * @return bool|null
+     */
+    public function report()
+    {
+        return null;
+    }
 }
