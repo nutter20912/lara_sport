@@ -25,29 +25,33 @@ use App\Http\Controllers\Sport\{
 */
 
 Route::prefix('sport')->group(function () {
-    Route::post('group/', [SportGroupController::class, 'post']);
+    Route::post('group', [SportGroupController::class, 'post']);
+    Route::get('group', [SportGroupController::class, 'getAll']);
     Route::get('group/{id}', [SportGroupController::class, 'get'])
         ->whereNumber('id');
 
     Route::post('/category', [SportCategoryController::class, 'post']);
+    Route::get('category', [SportCategoryController::class, 'getAll']);
     Route::get('/category/{id}', [SportCategoryController::class, 'get'])
         ->whereNumber('id');
 
     Route::post('/type', [SportTypeController::class, 'post']);
+    Route::get('/type', [SportTypeController::class, 'getAll']);
     Route::get('/type/{id}', [SportTypeController::class, 'get'])
         ->whereNumber('id');
 
     Route::post('/play', [SportPlayController::class, 'post']);
+    Route::get('/play', [SportPlayController::class, 'getAll']);
     Route::get('/play/{id}', [SportPlayController::class, 'get'])
         ->whereNumber('id');
 
     Route::post('/league', [SportLeagueController::class, 'post']);
-    Route::get('/league', [SportLeagueController::class, 'getList']);
+    Route::get('/league', [SportLeagueController::class, 'getAll']);
     Route::get('/league/{id}', [SportLeagueController::class, 'get'])
         ->whereNumber('id');
 
     Route::post('/team', [SportTeamController::class, 'post']);
-    Route::get('/team', [SportTeamController::class, 'getList']);
+    Route::get('/team', [SportTeamController::class, 'getAll']);
     Route::get('/team/{id}', [SportTeamController::class, 'get'])
         ->whereNumber('id');
 });

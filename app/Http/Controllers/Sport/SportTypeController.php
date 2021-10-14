@@ -21,17 +21,14 @@ class SportTypeController extends Controller
      *      summary="建立體育場別",
      *      description="建立體育場別",
      *      @OA\RequestBody(
-     *          description="create sport type",
      *          required=true,
      *          @OA\JsonContent(
-     *              @OA\Property(
-     *                  property="name",
-     *                  type="string"
-     *              )
-     *          )
+     *              required={"name"},
+     *              @OA\Property(property="name",type="string"),
+     *          ),
      *      ),
      *      @OA\Response(response=200, ref="#/components/responses/Success"),
-     *      @OA\Response(response=400, ref="#/components/responses/BadRequest")
+     *      @OA\Response(response=400, ref="#/components/responses/BadRequest"),
      * )
      *
      * @param  Illuminate\Http\Request $request
@@ -65,15 +62,7 @@ class SportTypeController extends Controller
      *      tags={"sport"},
      *      summary="回傳體育場別",
      *      description="回傳體育場別",
-     *      @OA\Parameter(
-     *          name="id",
-     *          description="sport type id",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(
-     *              type="integer"
-     *          )
-     *      ),
+     *      @OA\Parameter(name="id", description="體育場別編號", required=true, in="path", @OA\Schema(type="integer")),
      *      @OA\Response(response=200, ref="#/components/responses/Success"),
      *      @OA\Response(response=404, ref="#/components/responses/NotFound"),
      * )
@@ -88,5 +77,26 @@ class SportTypeController extends Controller
         }
 
         return Response::apiSuccess($sportType);
+    }
+
+    /**
+     * 回傳體育場別列表
+     *
+     * @OA\Get(
+     *      path="/api/sport/type",
+     *      operationId="getAllSportType",
+     *      tags={"sport"},
+     *      summary="回傳體育場別列表",
+     *      description="回傳體育場別列表",
+     *      @OA\Response(response=200, ref="#/components/responses/Success"),
+     *      @OA\Response(response=404, ref="#/components/responses/NotFound"),
+     * )
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public function getAll()
+    {
+        return Response::apiSuccess(SportType::all());
     }
 }
