@@ -29,4 +29,15 @@ class SportTeam extends Model
     {
         return $this->belongsTo(SportLeague::class);
     }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+        ];
+    }
 }

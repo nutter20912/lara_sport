@@ -51,8 +51,9 @@ Route::prefix('sport')->group(function () {
         ->whereNumber('id');
 
     Route::post('/team', [SportTeamController::class, 'post']);
-    Route::get('/team', [SportTeamController::class, 'getAll']);
     Route::get('/team/{id}', [SportTeamController::class, 'get'])
+        ->whereNumber('id');
+    Route::get('/team/league/{id}', [SportTeamController::class, 'getByLeague'])
         ->whereNumber('id');
 });
 
