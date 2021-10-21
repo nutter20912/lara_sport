@@ -14,6 +14,7 @@ class Game extends Model
      */
     protected $fillable = [
         'sport_category_id',
+        'sport_league_id',
         'main_team_id',
         'visit_team_id',
     ];
@@ -28,6 +29,15 @@ class Game extends Model
         return $this->belongsTo(SportCategory::class);
     }
 
+    /**
+     * 體育聯盟
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function sportLeague()
+    {
+        return $this->belongsTo(SportLeague::class);
+    }
 
     /**
      * 主隊
@@ -47,5 +57,25 @@ class Game extends Model
     public function visitTeam()
     {
         return $this->belongsTo(SportTeam::class);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'sport_category_id' => $this->sportCategory->id,
+            'sport_category_name' => $this->sportCategory->name,
+            'sport_league_id' => $this->sportLeague->id,
+            'sport_league_name' => $this->sportLeague->name,
+            'main_team_id' => $this->mainTeam->id,
+            'main_team_name' => $this->mainTeam->name,
+            'visit_team_id' => $this->visitTeam->id,
+            'visit_team_name' => $this->visitTeam->name,
+            'created_at' => $this->createdAt,
+            'updated_at' => $this->updatedAt,
+        ];
     }
 }

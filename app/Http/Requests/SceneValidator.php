@@ -28,11 +28,9 @@ trait SceneValidator
      *
      * @return array
      */
-    public function getSceneRules()
+    public function getSceneRules(): array
     {
-        return array_map(function($rules) {
-            return implode('|' , $rules);
-        }, $this->sceneRules);
+        return $this->sceneRules;
     }
 
     /**
@@ -40,15 +38,14 @@ trait SceneValidator
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         if ($scene = $this->getScene()) {
-            ['required' => $required, 'rules' => $rules] = $scene;
-            $ruleList = $this->ruleList();
+            ['attributes' => $attributes, 'extra' => $extra] = $scene;
 
             return $this
-                ->handleRequired($required)
-                ->handleRules($rules, $ruleList)
+                ->handleRules($attributes)
+                ->handleExtra($extra)
                 ->getSceneRules();
         }
     }
@@ -58,7 +55,7 @@ trait SceneValidator
      *
      * @return array
      */
-    public function getScene()
+    public function getScene(): array
     {
         $method = Route::getCurrentRoute()->getActionMethod();
 
@@ -66,30 +63,52 @@ trait SceneValidator
     }
 
     /**
-     * 處理必填欄位
+     * 處理驗證規則
      *
+     * @param array $attributes
      * @return self
      */
-    public function handleRequired($required)
+    public function handleRules($attributes): self
     {
-        $this->sceneRules = array_fill_keys($required, ['required']);
+        foreach ($attributes as $attribute) {
+            if (!$this->isRuleExist($attribute)) {
+                throw new \RuntimeException('unknown attribute.', 1234);
+            }
+
+            $this->sceneRules[$attribute] = $this->ruleList()[$attribute];
+        }
 
         return $this;
     }
 
     /**
-     * 處理驗證規則
+     * 規則是否存在
      *
+     * @param array $key
+     * @return bool
+     */
+    public function isRuleExist($key)
+    {
+        return isset($this->ruleList()[$key]);
+    }
+
+    /**
+     * 處理額外規則
+     *
+     * @param array $extra
      * @return self
      */
-    public function handleRules($rules, $ruleList): self
+    public function handleExtra($extra): self
     {
-        foreach ($rules as $rule) {
-            if (!isset($ruleList[$rule])) {
-                throw new \RuntimeException('unknown rule.', 1234);
+        foreach ($extra as $attribute => $rule) {
+            if (!$this->isRuleExist($attribute)) {
+                throw new \RuntimeException('unknown extra attribute.', 1234);
             }
 
-            $this->sceneRules[$rule][] = $ruleList[$rule];
+            $this->sceneRules[$attribute] = array_merge(
+                $this->sceneRules[$attribute] ?? [],
+                $rule,
+            );
         }
 
         return $this;

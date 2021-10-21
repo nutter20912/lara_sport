@@ -63,4 +63,6 @@ Route::prefix('game')->group(function () {
     Route::post('/', [GameController::class, 'post']);
     Route::get('/{id}', [GameController::class, 'get'])
         ->whereNumber('id');
+    Route::get('/category/{id}', [GameController::class, 'getByCategory'])
+        ->whereNumber('id');
 });
