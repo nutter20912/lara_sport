@@ -9,6 +9,7 @@
         "darkaonline/l5-swagger": "^8.0",
         "doctrine/dbal": "^3.1",
         "fruitcake/laravel-cors": "^2.0",
+        "godruoyi/php-snowflake": "^1.1",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.54",
         "laravel/sanctum": "^2.11",

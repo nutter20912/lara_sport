@@ -10,6 +10,13 @@ class Game extends Model
     protected $table = 'game';
 
     /**
+     * Indicates if the model's ID is auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
      * @var array
      */
     protected $fillable = [

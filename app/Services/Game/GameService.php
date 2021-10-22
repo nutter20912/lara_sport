@@ -7,10 +7,11 @@ use App\Models\SportTeam;
 use App\Exceptions\BadRequestException;
 use App\Models\Game;
 use App\Models\SportLeague;
+use Godruoyi\Snowflake\Snowflake;
 
 class GameService
 {
-    public function create($params): Game
+    public function create(Snowflake $snowflake, $params): Game
     {
         [
             'sport_category_id' => $sportCategoryId,
@@ -40,6 +41,7 @@ class GameService
         }
 
         $game = new Game();
+        $game->id = $snowflake->id();
         $game->sportCategory()->associate($sportCategory);
         $game->sportLeague()->associate($sportLeague);
         $game->mainTeam()->associate($mainTeam);

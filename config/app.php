@@ -179,7 +179,9 @@ return [
          * custom providers
          */
         App\Providers\ResponseMacroServiceProvider::class,
+        App\Providers\SnowflakeProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+
     ],
 
     /*

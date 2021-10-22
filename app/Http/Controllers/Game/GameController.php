@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GameRequest;
 use App\Services\Game\GameService;
 use App\Models\Game;
+use Godruoyi\Snowflake\Snowflake;
 use Illuminate\Support\Facades\Response;
 
 class GameController extends Controller
@@ -29,14 +30,7 @@ class GameController extends Controller
      */
     protected function get($id)
     {
-        $relations = [
-            'sportCategory',
-            'sportLeague',
-            'mainTeam',
-            'visitTeam',
-        ];
-
-        if (!$game = Game::with($relations)->find($id)) {
+        if (!$game = Game::find($id)) {
             throw new NotFoundHttpException('game not found', 10001);
         }
 
@@ -73,10 +67,15 @@ class GameController extends Controller
      * )
      *
      * @param Illuminate\Http\Request $request
+     * @param App\Services\Game\GameService $gameService
+     * @param Godruoyi\Snowflake\Snowflake $snowflake
      * @return mixed
      */
-    protected function post(GameRequest $request, GameService $gameService)
-    {
+    protected function post(
+        GameRequest $request,
+        GameService $gameService,
+        Snowflake $snowflake
+    ) {
         $params = $request->safe()->only([
             'sport_category_id',
             'sport_league_id',
@@ -84,7 +83,7 @@ class GameController extends Controller
             'visit_team_id',
         ]);
 
-        $game = $gameService->create($params);
+        $game = $gameService->create($snowflake, $params);
 
         return Response::apiSuccess($game);
     }
