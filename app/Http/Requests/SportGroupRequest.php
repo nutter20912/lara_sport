@@ -5,9 +5,11 @@ namespace App\Http\Requests;
 use App\Rules\NotZeroNumeric;
 use Illuminate\Foundation\Http\FormRequest;
 
-class SportTeamRequest extends FormRequest
+class SportGroupRequest extends FormRequest
 {
     use SceneValidator;
+
+    public $stopOnFirstFailure = true;
 
     /**
      * 驗證規則列表
@@ -17,8 +19,9 @@ class SportTeamRequest extends FormRequest
     public function ruleList()
     {
         return [
-            'name' => ['max:10'],
-            'sport_league_id' => [new NotZeroNumeric],
+            'sport_category_id' => [new NotZeroNumeric],
+            'sport_type_id' => [new NotZeroNumeric],
+            'sport_play_id' => [new NotZeroNumeric],
         ];
     }
 
@@ -32,14 +35,18 @@ class SportTeamRequest extends FormRequest
         return [
             'post' => [
                 'attributes' => [
-                    'name',
-                    'sport_league_id',
+                    'sport_category_id',
+                    'sport_type_id',
+                    'sport_play_id',
                 ],
                 'extra' => [
-                    'name' => [
+                    'sport_category_id' => [
                         'required',
                     ],
-                    'sport_league_id' => [
+                    'sport_type_id' => [
+                        'required',
+                    ],
+                    'sport_play_id' => [
                         'required',
                     ],
                 ],

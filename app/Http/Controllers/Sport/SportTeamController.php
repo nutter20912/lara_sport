@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Sport;
 
-use App\Exceptions\BadRequestException;
 use App\Exceptions\NotFoundHttpException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SportTeamRequest;
-use App\Models\SportLeague;
 use App\Models\SportTeam;
-use Illuminate\Http\Request;
+use App\Services\Sport\SportTeamService;
 use Illuminate\Support\Facades\Response;
 
 class SportTeamController extends Controller
@@ -19,7 +17,7 @@ class SportTeamController extends Controller
      * @OA\Post(
      *      path="/api/sport/team",
      *      operationId="postSportTeam",
-     *      tags={"sport"},
+     *      tags={"sport.team"},
      *      summary="建立體育隊伍",
      *      description="建立體育隊伍",
      *      @OA\RequestBody(
@@ -40,26 +38,15 @@ class SportTeamController extends Controller
      * @param  Illuminate\Http\Request $request
      * @return mixed
      */
-    public function post(SportTeamRequest $request)
-    {
+    public function post(
+        SportTeamRequest $request,
+        SportTeamService $sportTeamService,
+
+    ) {
         $name = $request->input('name');
         $sportLeagueId = $request->input('sport_league_id');
 
-        if (!SportLeague::find($sportLeagueId)) {
-            throw new BadRequestException('Sport league not found.', 10003);
-        }
-
-        $criteria = [
-            'name' => $name,
-            'sport_league_id' => $sportLeagueId,
-        ];
-
-        if (SportTeam::where($criteria)->first()) {
-            throw new BadRequestException('Duplicate entry.', 10003);
-        }
-
-        $sportTeam = SportTeam::create($criteria);
-        $sportTeam->save();
+        $sportTeam = $sportTeamService->create($name, $sportLeagueId);
 
         return Response::apiSuccess($sportTeam);
     }
@@ -70,7 +57,7 @@ class SportTeamController extends Controller
      * @OA\Get(
      *      path="/api/sport/team/{id}",
      *      operationId="getSportTeam",
-     *      tags={"sport"},
+     *      tags={"sport.team"},
      *      summary="回傳體育隊伍",
      *      description="回傳體育隊伍",
      *      @OA\Parameter(name="id", description="體育隊伍編號", required=true, in="path", @OA\Schema(type="integer")),
@@ -95,7 +82,7 @@ class SportTeamController extends Controller
      * @OA\Get(
      *      path="/api/sport/team/league/{id}",
      *      operationId="getAllSportTeam",
-     *      tags={"sport"},
+     *      tags={"sport.team"},
      *      summary="回傳體育隊伍列表",
      *      description="回傳體育隊伍列表",
      *      @OA\Parameter(name="id", description="體育聯盟編號", required=true, in="path", @OA\Schema(type="integer")),
@@ -107,12 +94,19 @@ class SportTeamController extends Controller
      */
     public function getByLeague($id)
     {
-        $sportLeague = SportTeam::where('sport_league_id', $id)->get();
+        $sportLeague = SportTeam::where('sport_league_id', $id)
+            ->with('sportLeague')
+            ->get();
 
         if ($sportLeague->isEmpty()) {
             throw new NotFoundHttpException('sport team not found', 10001);
         }
 
-        return Response::apiSuccess($sportLeague);
+        return Response::apiSuccess(
+            $sportLeague->map(fn ($item) => collect($item)->except([
+                'sport_league_id',
+                'sport_league_name',
+            ]))
+        );
     }
 }

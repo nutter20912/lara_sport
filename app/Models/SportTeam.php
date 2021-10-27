@@ -38,6 +38,8 @@ class SportTeam extends Model
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'sport_league_id' => $this->sportLeague->id,
+            'sport_league_name' => $this->sportLeague->name,
         ];
     }
 }

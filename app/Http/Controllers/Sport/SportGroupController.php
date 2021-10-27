@@ -2,18 +2,11 @@
 
 namespace App\Http\Controllers\Sport;
 
-use App\Exceptions\{
-    BadRequestException,
-    NotFoundHttpException
-};
+use App\Exceptions\NotFoundHttpException;
 use App\Http\Controllers\Controller;
-use App\Models\{
-    SportGroup,
-    SportCategory,
-    SportPlay,
-    SportType
-};
-use Illuminate\Http\Request;
+use App\Http\Requests\SportGroupRequest;
+use App\Models\SportGroup;
+use App\Services\Sport\SportGroupService;
 use Illuminate\Support\Facades\Response;
 
 class SportGroupController extends Controller
@@ -24,7 +17,7 @@ class SportGroupController extends Controller
      * @OA\Post(
      *      path="/api/sport/group",
      *      operationId="postSportGroup",
-     *      tags={"sport"},
+     *      tags={"sport.group"},
      *      summary="建立體育群組",
      *      description="建立體育群組",
      *      @OA\RequestBody(
@@ -48,48 +41,19 @@ class SportGroupController extends Controller
      * @param  Illuminate\Http\Request $request
      * @return mixed
      */
-    protected function post(Request $request)
-    {
+    protected function post(
+        SportGroupRequest $request,
+        SportGroupService $sportGroupService,
+    ) {
         $sportCategoryId = $request->input('sport_category_id');
         $sportTypeId = $request->input('sport_type_id');
         $sportPlayId = $request->input('sport_play_id');
 
-        if (!$sportCategoryId) {
-            throw new BadRequestException('Invalid sportCategoryId.', 10032);
-        }
-
-        if (!$sportTypeId) {
-            throw new BadRequestException('Invalid sportTypeId.', 10033);
-        }
-
-        if (!$sportPlayId) {
-            throw new BadRequestException('Invalid sportPlayId.', 10034);
-        }
-
-        if (!SportCategory::find($sportCategoryId)) {
-            throw new NotFoundHttpException('Sport Category not found', 10035);
-        }
-
-        if (!SportType::find($sportTypeId)) {
-            throw new NotFoundHttpException('Sport Type not found', 10036);
-        }
-
-        if (!SportPlay::find($sportPlayId)) {
-            throw new NotFoundHttpException('Sport Play not found', 10037);
-        }
-
-        $params = [
-            'sport_category_id' => $sportCategoryId,
-            'sport_type_id' => $sportTypeId,
-            'sport_play_id' => $sportPlayId,
-        ];
-
-        if (SportGroup::where($params)->first()) {
-            throw new BadRequestException('Duplicate entry.', 10038);
-        }
-
-        $sportGroup = SportGroup::create($params);
-        $sportGroup->save();
+        $sportGroup = $sportGroupService->create(
+            $sportCategoryId,
+            $sportTypeId,
+            $sportPlayId
+        );
 
         return Response::apiSuccess($sportGroup);
     }
@@ -100,7 +64,7 @@ class SportGroupController extends Controller
      * @OA\Get(
      *      path="/api/sport/group/{id}",
      *      operationId="getSportGroup",
-     *      tags={"sport"},
+     *      tags={"sport.group"},
      *      summary="回傳體育群組",
      *      description="回傳體育群組",
      *      @OA\Parameter(name="id", description="體育群組編號", required=true, in="path", @OA\Schema(type="integer")),
@@ -121,14 +85,15 @@ class SportGroupController extends Controller
     }
 
     /**
-     * 回傳體育群組列表
+     * 依類別回傳體育群組列表
      *
      * @OA\Get(
-     *      path="/api/sport/group",
-     *      operationId="getAllSportGroup",
-     *      tags={"sport"},
-     *      summary="回傳體育群組列表",
-     *      description="回傳體育群組列表",
+     *      path="/api/sport/group/category/{id}",
+     *      operationId="getSportGroupByCategory",
+     *      tags={"sport.group"},
+     *      summary="依類別回傳體育群組列表",
+     *      description="依類別回傳體育群組列表",
+     *      @OA\Parameter(name="id", description="體育類別編號", required=true, in="path", @OA\Schema(type="integer")),
      *      @OA\Response(response=200, ref="#/components/responses/Success"),
      *      @OA\Response(response=404, ref="#/components/responses/NotFound"),
      * )
@@ -136,8 +101,19 @@ class SportGroupController extends Controller
      * @param int $id
      * @return mixed
      */
-    protected function getAll()
+    protected function getByCategory($id)
     {
-        return Response::apiSuccess(SportGroup::all());
+        $sportGroups = SportGroup::where(['sport_category_id' => $id])
+            ->with([
+                'sportType',
+                'sportPlay',
+            ])
+            ->get();
+
+        if ($sportGroups->isEmpty()) {
+            throw new NotFoundHttpException('sportGroups not found', 10001);
+        }
+
+        return Response::apiSuccess($sportGroups);
     }
 }

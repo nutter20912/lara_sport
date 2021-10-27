@@ -74,16 +74,20 @@ class GameController extends Controller
     protected function post(
         GameRequest $request,
         GameService $gameService,
-        Snowflake $snowflake
+        Snowflake $snowflake,
     ) {
-        $params = $request->safe()->only([
-            'sport_category_id',
-            'sport_league_id',
-            'main_team_id',
-            'visit_team_id',
-        ]);
+        $sportCategoryId = $request->input('sport_category_id');
+        $sportLeagueId = $request->input('sport_league_id');
+        $mainTeamId = $request->input('main_team_id');
+        $visitTeamId = $request->input('visit_team_id');
 
-        $game = $gameService->create($snowflake, $params);
+        $game = $gameService->create(
+            (int)$snowflake->id(),
+            $sportCategoryId,
+            $sportLeagueId,
+            $mainTeamId,
+            $visitTeamId,
+        );
 
         return Response::apiSuccess($game);
     }
@@ -106,18 +110,24 @@ class GameController extends Controller
      */
     protected function getByCategory($id)
     {
-        $relations = [
-            'sportCategory',
-            'sportLeague',
-            'mainTeam',
-            'visitTeam',
-        ];
-        $game = Game::where(['sport_category_id' => $id])->with($relations)->get();
+        $game = Game::where(['sport_category_id' => $id])
+            ->with([
+                'sportCategory',
+                'sportLeague',
+                'mainTeam',
+                'visitTeam',
+            ])
+            ->get();
 
         if ($game->isEmpty()) {
             throw new NotFoundHttpException('games not found', 10001);
         }
 
-        return Response::apiSuccess($game);
+        return Response::apiSuccess(
+            $game->map(fn ($item) => collect($item)->except([
+                'sport_category_id',
+                'sport_category_name',
+            ]))
+        );
     }
 }

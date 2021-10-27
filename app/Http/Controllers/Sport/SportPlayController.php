@@ -6,6 +6,7 @@ use App\Exceptions\BadRequestException;
 use App\Exceptions\NotFoundHttpException;
 use App\Http\Controllers\Controller;
 use App\Models\SportPlay;
+use App\Services\Sport\SportPlayService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -17,7 +18,7 @@ class SportPlayController extends Controller
      * @OA\Post(
      *      path="/api/sport/play",
      *      operationId="postSportPlay",
-     *      tags={"sport"},
+     *      tags={"sport.play"},
      *      summary="建立體育玩法",
      *      description="建立體育玩法",
      *      @OA\RequestBody(
@@ -33,21 +34,14 @@ class SportPlayController extends Controller
      * @param  Illuminate\Http\Request $request
      * @return mixed
      */
-    public function post(Request $request)
+    public function post(
+        Request $request,
+        SportPlayService $sportPlayService
+        )
     {
         $name = $request->input('name');
 
-        if (!$name) {
-            throw new BadRequestException('Invalid name.', 10022);
-        }
-
-        if (SportPlay::where('name', $name)->first()) {
-            throw new BadRequestException('Duplicate entry.', 10023);
-        }
-
-        $sportPlay = new SportPlay();
-        $sportPlay->name = $name;
-        $sportPlay->save();
+        $sportPlay = $sportPlayService->create($name);
 
         return Response::apiSuccess($sportPlay);
     }
@@ -58,7 +52,7 @@ class SportPlayController extends Controller
      * @OA\Get(
      *      path="/api/sport/play/{id}",
      *      operationId="getSportPlay",
-     *      tags={"sport"},
+     *      tags={"sport.play"},
      *      summary="回傳體育玩法",
      *      description="回傳體育玩法",
      *      @OA\Parameter(name="id", description="體育玩法編號", required=true, in="path", @OA\Schema(type="integer")),
@@ -84,7 +78,7 @@ class SportPlayController extends Controller
      * @OA\Get(
      *      path="/api/sport/play",
      *      operationId="getAllSportPlay",
-     *      tags={"sport"},
+     *      tags={"sport.play"},
      *      summary="回傳體育玩法列表",
      *      description="回傳體育玩法列表",
      *      @OA\Response(response=200, ref="#/components/responses/Success"),

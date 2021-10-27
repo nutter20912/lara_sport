@@ -51,4 +51,18 @@ class SportGroup extends Model
     {
         return $this->belongsTo(SportPlay::class);
     }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'sport_category_id' => $this->sportCategory->id,
+            'sport_category_name' => $this->sportCategory->name,
+            'sport_type_id' => $this->sportType->id,
+            'sport_type_name' => $this->sportType->name,
+            'sport_play_id' => $this->sportPlay->id,
+            'sport_play_name' => $this->sportPlay->name,
+            'enable' => $this->enable,
+        ];
+    }
 }

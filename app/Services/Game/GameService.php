@@ -3,45 +3,76 @@
 namespace App\Services\Game;
 
 use App\Models\SportCategory;
-use App\Models\SportTeam;
 use App\Exceptions\BadRequestException;
 use App\Models\Game;
-use App\Models\SportLeague;
-use Godruoyi\Snowflake\Snowflake;
+use App\Repositories\SportLeagueRepository;
+use App\Repositories\SportTeamRepository;
 
 class GameService
 {
-    public function create(Snowflake $snowflake, $params): Game
-    {
-        [
-            'sport_category_id' => $sportCategoryId,
-            'sport_league_id' => $sportLeagueId,
-            'main_team_id' => $mainTeamId,
-            'visit_team_id' => $visitTeamId,
-        ] = $params;
+    private SportLeagueRepository $sportLeagueRepository;
 
+    private SportTeamRepository $sportTeamRepository;
+
+    public function __construct(
+        SportLeagueRepository $sportLeagueRepository,
+        SportTeamRepository $sportTeamRepository,
+    ) {
+        $this->sportLeagueRepository = $sportLeagueRepository;
+        $this->sportTeamRepository = $sportTeamRepository;
+    }
+
+    /**
+     * 建立遊戲場次
+     *
+     * @param int $id
+     * @param int $sportCategoryId
+     * @param int $sportLeagueId
+     * @param int $mainTeamId
+     * @param int $visitTeamId
+     */
+    public function create(
+        $id,
+        $sportCategoryId,
+        $sportLeagueId,
+        $mainTeamId,
+        $visitTeamId
+    ): Game {
         if ($mainTeamId == $visitTeamId) {
             throw new BadRequestException('same Team.', 20001);
+        }
+
+        if (Game::find($id)) {
+            throw new BadRequestException('Duplicate entry.', 20001);
         }
 
         if (!$sportCategory = SportCategory::find($sportCategoryId)) {
             throw new BadRequestException('sport category not found', 20001);
         }
 
-        if (!$sportLeague = $this->getSportLeague($sportLeagueId, $sportCategoryId)) {
+        $sportLeague = $this->sportLeagueRepository
+            ->getLeague($sportLeagueId, $sportCategoryId);
+
+        if (!$sportLeague) {
             throw new BadRequestException('sport league not found', 20001);
         }
 
-        if (!$mainTeam = $this->getSportTeam($mainTeamId, $sportLeagueId)) {
+        $mainTeam = $this->sportTeamRepository
+            ->getTeam($mainTeamId, $sportLeagueId);
+
+        if (!$mainTeam) {
             throw new BadRequestException('SportMainTeam not found', 20001);
         }
 
-        if (!$visitTeam = $this->getSportTeam($visitTeamId, $sportLeagueId)) {
+        $visitTeam = $this->sportTeamRepository
+            ->getTeam($visitTeamId, $sportLeagueId);
+
+        if (!$visitTeam) {
             throw new BadRequestException('sportVisitTeam not found', 20001);
         }
 
         $game = new Game();
-        $game->id = $snowflake->id();
+        $game->id = $id;
         $game->sportCategory()->associate($sportCategory);
         $game->sportLeague()->associate($sportLeague);
         $game->mainTeam()->associate($mainTeam);
@@ -49,33 +80,5 @@ class GameService
         $game->save();
 
         return $game;
-    }
-
-    /**
-     * 回傳體育聯盟
-     *
-     * @param int $id
-     * @param int $sportCategoryId
-     */
-    public function getSportLeague($id, $sportCategoryId): ?SportLeague
-    {
-        return SportLeague::where([
-            'id' => $id,
-            'sport_category_id' => $sportCategoryId,
-        ])->first();
-    }
-
-    /**
-     * 回傳體育隊伍
-     *
-     * @param int $id
-     * @param int $sportCategoryId
-     */
-    public function getSportTeam($id, $sportLeagueId): ?SportTeam
-    {
-        return SportTeam::where([
-            'id' => $id,
-            'sport_league_id' => $sportLeagueId,
-        ])->first();
     }
 }

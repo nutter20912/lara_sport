@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Sport;
 
-use App\Exceptions\BadRequestException;
 use App\Exceptions\NotFoundHttpException;
 use App\Http\Controllers\Controller;
 use App\Models\SportType;
+use App\Services\Sport\SportTypeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -17,7 +17,7 @@ class SportTypeController extends Controller
      * @OA\Post(
      *      path="/api/sport/type",
      *      operationId="postSportType",
-     *      tags={"sport"},
+     *      tags={"sport.type"},
      *      summary="建立體育場別",
      *      description="建立體育場別",
      *      @OA\RequestBody(
@@ -34,21 +34,14 @@ class SportTypeController extends Controller
      * @param  Illuminate\Http\Request $request
      * @return mixed
      */
-    public function post(Request $request)
+    public function post(
+        Request $request,
+        SportTypeService $sportTypeService
+        )
     {
         $name = $request->input('name');
 
-        if (!$name) {
-            throw new BadRequestException('Invalid name.', 10012);
-        }
-
-        if (SportType::where('name', $name)->first()) {
-            throw new BadRequestException('Duplicate entry.', 10013);
-        }
-
-        $sportType = new SportType();
-        $sportType->name = $name;
-        $sportType->save();
+        $sportType = $sportTypeService->create($name);
 
         return Response::apiSuccess($sportType);
     }
@@ -59,7 +52,7 @@ class SportTypeController extends Controller
      * @OA\Get(
      *      path="/api/sport/type/{id}",
      *      operationId="getSportType",
-     *      tags={"sport"},
+     *      tags={"sport.type"},
      *      summary="回傳體育場別",
      *      description="回傳體育場別",
      *      @OA\Parameter(name="id", description="體育場別編號", required=true, in="path", @OA\Schema(type="integer")),
@@ -85,7 +78,7 @@ class SportTypeController extends Controller
      * @OA\Get(
      *      path="/api/sport/type",
      *      operationId="getAllSportType",
-     *      tags={"sport"},
+     *      tags={"sport.type"},
      *      summary="回傳體育場別列表",
      *      description="回傳體育場別列表",
      *      @OA\Response(response=200, ref="#/components/responses/Success"),

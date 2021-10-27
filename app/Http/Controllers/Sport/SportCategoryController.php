@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Sport;
 use App\Exceptions\BadRequestException;
 use App\Exceptions\NotFoundHttpException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SportCategoryRequest;
 use App\Models\SportCategory;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class SportCategoryController extends Controller
@@ -17,7 +17,7 @@ class SportCategoryController extends Controller
      * @OA\Post(
      *      path="/api/sport/category",
      *      operationId="postSportCategory",
-     *      tags={"sport"},
+     *      tags={"sport.category"},
      *      summary="建立體育類別",
      *      description="建立體育類別",
      *      @OA\RequestBody(
@@ -34,13 +34,9 @@ class SportCategoryController extends Controller
      * @param  Illuminate\Http\Request $request
      * @return mixed
      */
-    public function post(Request $request)
+    public function post(SportCategoryRequest $request)
     {
         $name = $request->input('name');
-
-        if (!$name) {
-            throw new BadRequestException('Invalid name.', 10002);
-        }
 
         if (SportCategory::where('name', $name)->first()) {
             throw new BadRequestException('Duplicate entry.', 10003);
@@ -59,7 +55,7 @@ class SportCategoryController extends Controller
      * @OA\Get(
      *      path="/api/sport/category/{id}",
      *      operationId="getSportCategory",
-     *      tags={"sport"},
+     *      tags={"sport.category"},
      *      summary="回傳體育類別",
      *      description="回傳體育類別",
      *      @OA\Parameter(name="id", description="體育類別編號", required=true, in="path", @OA\Schema(type="integer")),
@@ -85,7 +81,7 @@ class SportCategoryController extends Controller
      * @OA\Get(
      *      path="/api/sport/category",
      *      operationId="getAllSportCategory",
-     *      tags={"sport"},
+     *      tags={"sport.category"},
      *      summary="回傳體育類別列表",
      *      description="回傳體育類別列表",
      *      @OA\Response(response=200, ref="#/components/responses/Success"),

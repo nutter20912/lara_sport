@@ -27,7 +27,7 @@ use App\Http\Controllers\Sport\{
 Route::prefix('sport')->group(function () {
     Route::post('group', [SportGroupController::class, 'post']);
     Route::get('group', [SportGroupController::class, 'getAll']);
-    Route::get('group/{id}', [SportGroupController::class, 'get'])
+    Route::get('group/category/{id}', [SportGroupController::class, 'getByCategory'])
         ->whereNumber('id');
 
     Route::post('/category', [SportCategoryController::class, 'post']);
