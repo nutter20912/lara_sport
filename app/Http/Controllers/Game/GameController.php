@@ -76,10 +76,10 @@ class GameController extends Controller
         GameService $gameService,
         Snowflake $snowflake,
     ) {
-        $sportCategoryId = $request->input('sport_category_id');
-        $sportLeagueId = $request->input('sport_league_id');
-        $mainTeamId = $request->input('main_team_id');
-        $visitTeamId = $request->input('visit_team_id');
+        $sportCategoryId = $request->integer('sport_category_id');
+        $sportLeagueId = $request->integer('sport_league_id');
+        $mainTeamId = $request->integer('main_team_id');
+        $visitTeamId = $request->integer('visit_team_id');
 
         $game = $gameService->create(
             (int)$snowflake->id(),

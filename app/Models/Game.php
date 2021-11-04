@@ -67,6 +67,17 @@ class Game extends Model
     }
 
     /**
+     * Get the game's id.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getIdAttribute($value)
+    {
+        return (string)$value;
+    }
+
+    /**
      * @return array
      */
     public function toArray()

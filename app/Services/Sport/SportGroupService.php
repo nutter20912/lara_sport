@@ -18,9 +18,9 @@ class SportGroupService
      * @param int $sportPlayId
      */
     public function create(
-        $sportCategoryId,
-        $sportTypeId,
-        $sportPlayId,
+        int $sportCategoryId,
+        int $sportTypeId,
+        int $sportPlayId,
     ): SportGroup {
         if (!$sportCategory = SportCategory::find($sportCategoryId)) {
             throw new BadRequestException('Sport Category not found', 10035);

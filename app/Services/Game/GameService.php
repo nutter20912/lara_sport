@@ -32,11 +32,11 @@ class GameService
      * @param int $visitTeamId
      */
     public function create(
-        $id,
-        $sportCategoryId,
-        $sportLeagueId,
-        $mainTeamId,
-        $visitTeamId
+        int $id,
+        int $sportCategoryId,
+        int $sportLeagueId,
+        int $mainTeamId,
+        int $visitTeamId
     ): Game {
         if ($mainTeamId == $visitTeamId) {
             throw new BadRequestException('same Team.', 20001);

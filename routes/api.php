@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Game\{
-    GameController
+    GameController,
+    GameStatusController
 };
 use App\Http\Controllers\Sport\{
     SportCategoryController,
@@ -61,8 +62,11 @@ Route::prefix('sport')->group(function () {
 
 Route::prefix('game')->group(function () {
     Route::post('/', [GameController::class, 'post']);
-    Route::get('/{id}', [GameController::class, 'get'])
-        ->whereNumber('id');
-    Route::get('/category/{id}', [GameController::class, 'getByCategory'])
-        ->whereNumber('id');
+    Route::get('/{id}', [GameController::class, 'get'])->whereNumber('id');
+    Route::get('/category/{id}', [GameController::class, 'getByCategory'])->whereNumber('id');
+
+
+    Route::post('{game_id}/status', [GameStatusController::class, 'post']);
+    Route::get('{game_id}/status', [GameStatusController::class, 'get'])->whereNumber('id');
+    Route::get('{game_id}/status/{status_id}', [GameStatusController::class, 'get'])->whereNumber('id');
 });

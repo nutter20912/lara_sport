@@ -27,26 +27,14 @@ use Illuminate\Routing\Controller as BaseController;
  * @OA\Schema(
  *      schema="success",
  *      description="基本回應格式",
- *      @OA\Property(
- *          property="message",
- *          type="string",
- *          example="ok"
- *      )
+ *      @OA\Property(property="message",type="string",example="ok")
  * )
  *
  * @OA\Schema(
  *      schema="response",
  *      description="基本回應格式",
- *      @OA\Property(
- *          property="message",
- *          type="string",
- *          example="ok"
- *      ),
- *      @OA\Property(
- *          property="result",
- *          type="object",
- *          example={"id":"1"}
- *      )
+ *      @OA\Property(property="message",type="string",example="ok"),
+ *      @OA\Property(property="result",type="object",example={"id":"1"})
  * )
  *
  * @OA\Response(
@@ -55,10 +43,7 @@ use Illuminate\Routing\Controller as BaseController;
  *      @OA\JsonContent(
  *          allOf={
  *              @OA\Schema(
- *                  @OA\Property(
- *                      property="code",
- *                      type="integer"
- *                  )
+ *                  @OA\Property(property="code",type="integer")
  *              ),
  *              @OA\Schema(ref="#/components/schemas/response")
  *          }

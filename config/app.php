@@ -178,6 +178,8 @@ return [
         /**
          * custom providers
          */
+        App\Providers\HelperMacroProvider::class,
+        App\Providers\RequestMacroProvider::class,
         App\Providers\ResponseMacroServiceProvider::class,
         App\Providers\SnowflakeProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
